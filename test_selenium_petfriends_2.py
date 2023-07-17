@@ -38,7 +38,9 @@ def testing():
 # Тест карточек всех питомцев сайта!
 def test_show_all_pets_cards():
     images = pytest.driver.find_elements(By.CSS_SELECTOR, '.card-deck .card-img-top')
+    pytest.driver.implicitly_wait(10)
     names = pytest.driver.find_elements(By.CSS_SELECTOR, '.card-deck .card-title')
+    pytest.driver.implicitly_wait(10)
     descriptions = pytest.driver.find_elements(By.CSS_SELECTOR, '.card-deck .card-text')
     pytest.driver.implicitly_wait(10)
     for i in range(len(names)):                      # У питомца есть:
@@ -72,7 +74,8 @@ def test_show_my_pets():
     statistics_pets_total = statistics_pets_total[1].split(':')
     statistics_count_my_pets = int(statistics_pets_total[1])
 
-    quantity_real_my_pets = pytest.driver.find_elements(By.CSS_SELECTOR, "#all_my_pets > table > tbody > tr")
+    quantity_real_my_pets = WebDriverWait(pytest.driver, 10).until(
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR, "#all_my_pets > table > tbody > tr")))
     # Кладём в переменную количество реальных питомцев пользователя (количество строк).
     count_real_my_pets = len(quantity_real_my_pets)
 
@@ -81,8 +84,9 @@ def test_show_my_pets():
     assert statistics_count_my_pets == count_real_my_pets
 
     # Кладём в переменную всех питомцев с тегом img
-    my_pets_images = pytest.driver.find_elements(By.CSS_SELECTOR,
-                                                 "#all_my_pets > table > tbody > tr > th > img")
+    my_pets_images = WebDriverWait(pytest.driver, 10).until(
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR,
+                                            "#all_my_pets > table > tbody > tr > th > img")))
     # Кладём в переменную счётчик количество питомцев с фото
     count_photo_my_pets = 0
     for i in range(len(my_pets_images)):
@@ -94,12 +98,15 @@ def test_show_my_pets():
 
     assert count_photo_my_pets >= count_real_my_pets / 2
 
-    names_my_pets = pytest.driver.find_elements(By.CSS_SELECTOR,
-                                                "#all_my_pets > table > tbody > tr > td:nth-child(2)")
-    breed_my_pets = pytest.driver.find_elements(By.CSS_SELECTOR,
-                                                '#all_my_pets > table > tbody > tr > td:nth-child(3)')
-    age_my_pets = pytest.driver.find_elements(By.CSS_SELECTOR,
-                                              "#all_my_pets > table > tbody > tr > td:nth-child(4)")
+    names_my_pets = WebDriverWait(pytest.driver, 10).until(
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR,
+                                            "#all_my_pets > table > tbody > tr > td:nth-child(2)")))
+    breed_my_pets = WebDriverWait(pytest.driver, 10).until(
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR,
+                                            "#all_my_pets > table > tbody > tr > td:nth-child(3)")))
+    age_my_pets = WebDriverWait(pytest.driver, 10).until(
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR,
+                                            "#all_my_pets > table > tbody > tr > td:nth-child(4)")))
 
     names_my_pets_real = []
     breed_my_pets_real = []
